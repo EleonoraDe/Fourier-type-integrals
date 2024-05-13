@@ -5,7 +5,7 @@ function [x,w] = fourierpts(n,a,c,CS,d)
 % or
 %             w_S(t) = t^(a-1)*exp(-c*t)*(sin(t)+1).
 %
-%   [X,W] = FOURIERPTS(N,A,C,CS) returns N nodes in (0,Inf) in the colon
+%   [X,W] = FOURIERPTS(N,A,C,CS) returns N nodes in (0,Inf) in the column
 %   vector X and a row vector W of weights, relative to the weight function
 %   w_C(t) or w_S(t), with parameters A and C. A and C must be real-valued
 %   scalar > 0. CS = 'cos' is relative to the weight function w_C(t),
@@ -43,7 +43,7 @@ if  a <= 0
 end
 
 if c <= 0
-    error('Third should be positive.')
+    error('Third input should be positive.')
 end
 
 if ~ strcmp(CS,'cos') && ~ strcmp(CS,'sin')
@@ -51,30 +51,32 @@ if ~ strcmp(CS,'cos') && ~ strcmp(CS,'sin')
 end
 
 if nargin == 5
-    syms mu mu0
+    syms mu 
     a = sym(a); c = sym(c);
 else
     d = [];
 end
 
 % Computation of the moments 
+phi = atan(1/c);
 if CS == 'cos'
-    F = cos(a*atan(1/c));
-    G = cos((1+a)*atan(1/c));
+    F = cos(a*phi);
 else
-    F = sin(a*atan(1/c));
-    G = sin((1+a)*atan(1/c));
+    F = sin(a*phi);
 end
 s = sqrt(1+c^2);
-mu0(1) = gamma(a)/s^a*F;
-mu0(2) = gamma(a+1)/s^(a+1)*G;
-mu(1) = mu0(1)+gamma(a)/c^a;
-mu(2) = mu0(2)+gamma(a+1)/c^(a+1);  
-for k = 2:2*n-1    
-    mu0(k+1) = 2*c/s^2*(k+a-1)*mu0(k)-(k+a-2)*(k-1+a)/s^2*mu0(k-1);
-    mu(k+1) = 2*c*(k-1+a)/s^2*mu(k)-(k-1+a-1)*(k-1+a)/s^2*mu(k-1)+...
-        gamma(k-1+a+1)/c^(k-1+a+1)/s^2;
-end 
+mu(1) = gamma(a)/s^a*F+gamma(a)/c^a;
+for k = 1:2*n-1
+    if CS == 'cos'
+        G = cos((k+a)*phi);
+        H = cos((k-1+a)*phi);
+    else
+        G = sin((k+a)*phi);
+        H = sin((k-1+a)*phi);
+    end
+    mu(k+1) = (k-1+a)/c*(G*(cos(phi))^(k+a)+1)/...
+        (H*(cos(phi))^(k-1+a)+1)*mu(k);
+end
 
 % Computation of the recurrence coefficients via Chebyshev algorithm
 ab=chebyshev(n,mu,d);
