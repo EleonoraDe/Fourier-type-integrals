@@ -12,7 +12,7 @@ function [x,w] = fourierpts(n,a,c,CS,d)
 %   while CS = 'sin' allows the user to work with w_S(t).
 %
 %   [X,W] = FOURIERPTS(N,A,C,CS,D) allows the user to work with variable
-%   precision arithmetic with D signifincant decimal digits. The outputs
+%   precision arithmetic with D significant decimal digits. The outputs
 %   are returned in standard double precision.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
