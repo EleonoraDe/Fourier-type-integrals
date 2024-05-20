@@ -4,7 +4,7 @@ The function quad_fourier.m evaluates the integral of the function g(x)*x^(alpha
 using the coupled Gaussian rule developed in [1].
 
 The function quad_fourier_lag.m evaluates the integral of the same functions, by using the generalized Gauss-Laguerre rule.
-Both codes requires the function lagpts.m of the Chebfun open-source software [2].
+Both codes require the function lagpts.m of the Chebfun open-source software [2].
 
 An example is shown in the script example.m, in which the reference solution is computed by using the code quad_fourier_lag.m.
 All the codes are implemented in Matlab.
